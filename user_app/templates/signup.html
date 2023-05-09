@@ -1,0 +1,28 @@
+{% load crispy_forms_tags %}
+
+<div style="background-color: bisque; height:max-content">
+
+<center>
+
+{% if messages %}
+{% for message in messages %}
+<div>{{ message|safe }}</div>
+{% endfor %}
+{% endif %}
+
+     <div>
+        <form action="{% url 'user_app:signup' %}" method="POST" style="width: 300px; height:1000px;">
+            {% csrf_token %}
+
+            <br>
+            <h2>Registration</h2>
+            <br>
+
+            {{form|crispy}}  <br>
+            <button type="submit" class="btn btn-danger">SignUp</button>
+
+        </form>
+    </div>
+
+</center>
+</div>

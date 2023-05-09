@@ -1,0 +1,32 @@
+{% extends 'b_base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div style="background-color: bisque; height:max-content">
+<center>
+
+{% if messages %}
+{% for message in messages %}
+<div>{{ message|safe }}</div>
+{% endfor %}
+{% endif %}
+
+     <div>
+        <form action="{% url 'bank_app:deposit' %}" method="POST" style="width: 300px; height:1000px;">
+            {% csrf_token %}
+
+            <br>
+            <h2>Deposit Amount </h2>
+            <br>
+
+            {{form|crispy}}  <br>
+            <button type="submit" class="btn btn-danger">Submit</button>
+
+        </form>
+    </div>
+
+</center>
+</div>
+
+{% endblock %}
