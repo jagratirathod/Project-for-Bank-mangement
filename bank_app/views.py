@@ -1,17 +1,13 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 from django.views.generic.edit import CreateView
-from . forms import DepositForm , WithdrawForm
 from django.urls import reverse_lazy
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic.list import ListView
-from .models import Transction
-from django.shortcuts import get_object_or_404
-from django.db.models import Q
 from django.db import transaction
 from django.contrib import messages
 
-# Create your views here.
+from .models import Transction
+from . forms import DepositForm , WithdrawForm
 
 def home(request):
     return render(request,"b_base.html")
