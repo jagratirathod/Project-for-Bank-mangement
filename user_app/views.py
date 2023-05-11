@@ -11,7 +11,6 @@ from django.contrib.auth import authenticate, login
 def home(request):
     return render(request,"base.html")
 
-
 class SignupView(SuccessMessageMixin,CreateView):
     form_class = SignupForm
     template_name = "signup.html"
@@ -28,5 +27,6 @@ class LoginView(CreateView):
         
         user = authenticate(email=email,password=password)
         if user:
+            login(request, user)
             return redirect("/bank_app/")
         return HttpResponse("You have not signup ! please signup first")

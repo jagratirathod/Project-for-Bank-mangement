@@ -12,14 +12,12 @@
     {% endfor %}
     {% endif %}
     
-    
-
-     <div>
-        <form action="{% url 'bank_app:deposit' %}" method="POST" style="width: 300px; height:1000px;">
+    <div>
+        <form action="{% url 'bank_app:withdraw' %}" method="POST" style="width: 300px; height:1000px;">
             {% csrf_token %}
 
             <br>
-            <h2>Deposit Amount </h2>
+            <h2>Withdraw Amount </h2>
             <br>
 
             {{form|crispy}}  <br>

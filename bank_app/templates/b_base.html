@@ -15,7 +15,7 @@
 <body>
   <nav class="navbar navbar-expand-lg  bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand " href="#">welcome To Bank</a>
+      <a class="navbar-brand " href="#">Welcome To Bank</a>
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -27,7 +27,15 @@
           </li>
 
           <li class="nav-item">
-            <h5> <a class="nav-link" href="">Withdraw</a></h5>
+            <h5> <a class="nav-link" href="{% url 'bank_app:withdraw' %}">Withdraw</a></h5>
+          </li>
+
+          <li class="nav-item">
+            <h5> <a class="nav-link" href="{% url 'bank_app:report' %}">Transaction Report</a></h5>
+          </li>
+
+          <li class="nav-item">
+            <h5> <a class="nav-link" href="{% url 'bank_app:transfer' %}">Transfer Amount</a></h5>
           </li>
 
           <li class="nav-item">

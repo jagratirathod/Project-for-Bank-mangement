@@ -8,7 +8,7 @@ from .manager import UserManager
 class User(AbstractUser):
     username = None
     email = models.EmailField(unique=True)
-    account_number = models.IntegerField(unique=True)
+    account_number = models.IntegerField(unique=True,null=True)
     is_manager = models.BooleanField(default=False)
 
     objects = UserManager()
@@ -17,5 +17,5 @@ class User(AbstractUser):
 
     REQUIRED_FIELDS = []
 
-    def __str__(self):
-        return f"{self.account_number}"
+    def __int__(self):
+        return self.email
