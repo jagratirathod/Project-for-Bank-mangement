@@ -5,6 +5,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic.list import ListView
 from django.db import transaction
 from django.contrib import messages
+from django.http import HttpResponse
 
 from .models import Transction
 from . forms import DepositForm , WithdrawForm
@@ -39,9 +40,13 @@ class WithdrawView(SuccessMessageMixin,CreateView):
         amount = self.request.POST.get("amount")
         form.instance.user = self.request.user
         form.instance.transction_type = Transction.type[1][1]
+       
         last_amount =Transction.objects.filter(user=self.request.user).last()
         if last_amount:
-            form.instance.balance_after_transaction = last_amount.balance_after_transaction - int(amount) 
+            if last_amount.balance_after_transaction >= int(amount):
+                form.instance.balance_after_transaction = last_amount.balance_after_transaction - int(amount) 
+            else:
+                return HttpResponse("Insufficient Balance!")
         else:
             form.instance.balance_after_transaction = int(amount)
         return super().form_valid(form)
@@ -97,7 +102,7 @@ def TransferAmountView(request):
                 messages.success(request,'Successfully your Amount is transfered')
         except Exception as e:
             print(e) 
-            messages.success(request,'Something went wrong!')
+            messages.success(request,'Account Number does not Exists!')
     return render(request,"transfer.html")
 
 
