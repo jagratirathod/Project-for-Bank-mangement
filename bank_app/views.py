@@ -48,7 +48,7 @@ class WithdrawView(SuccessMessageMixin,CreateView):
             if last_amount.balance_after_transaction >= int(amount):
                 form.instance.balance_after_transaction = last_amount.balance_after_transaction - int(amount) 
             else:
-                return HttpResponse("Insufficient Balance!")
+                return render(self.request, "transfer.html", {'error_message': 'Insufficient Balance!'})
         else:
             form.instance.balance_after_transaction = int(amount)
         return super().form_valid(form)
@@ -89,8 +89,7 @@ def TransferAmountView(request):
                     user1.balance_after_transaction-= int(amount)
                     trans = Transction.objects.create(transction_type=Transction.type[1][1],user=request.user,amount = int(amount),balance_after_transaction=user1.balance_after_transaction)
                 else:
-                    messages.error(request,'Not Enough Balance')
-                    return HttpResponse(messages)
+                    return render(request, "transfer.html", {'error_message': 'Insufficient Balance!'})
                 
                 user2 = User.objects.filter(Q(account_number=send) & ~Q(account_number=request.user.account_number)).last()
                 if user2.transactions.last():

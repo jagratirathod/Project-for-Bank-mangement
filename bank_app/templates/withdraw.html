@@ -6,26 +6,20 @@
 <div style="background-color: bisque; height:max-content">
 <center>
 
-    {% if messages %}
-    {% for message in messages %}
-    <div style="color:green">{{ message}}</div>
-    {% endfor %}
-    {% endif %}
+{% if messages %}
+{% for message in messages %}
+<div>{{ message}}</div>
+{% endfor %}
+{% endif %}
     
-    <div>
-        <form action="{% url 'bank_app:withdraw' %}" method="POST" style="width: 300px; height:1000px;">
-            {% csrf_token %}
-
-            <br>
-            <h2>Withdraw Amount </h2>
-            <br>
-
-            {{form|crispy}}  <br>
-            <button type="submit" class="btn btn-danger">Submit</button>
-
-        </form>
-    </div>
-
+<div>
+    <form action="{% url 'bank_app:withdraw' %}" method="POST" style="width: 300px; height:1000px;">
+        {% csrf_token %}
+        <br><br>
+        {{form|crispy}}  <br>
+        <button type="submit" class="btn btn-danger">Submit</button>
+    </form>
+</div>
 </center>
 </div>
 
