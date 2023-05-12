@@ -6,8 +6,10 @@ from django.views.generic.list import ListView
 from django.db import transaction
 from django.contrib import messages
 from django.http import HttpResponse
+from django.db.models import Q
 
 from .models import Transction
+from user_app.models import User
 from . forms import DepositForm , WithdrawForm
 
 def home(request):
@@ -41,7 +43,7 @@ class WithdrawView(SuccessMessageMixin,CreateView):
         form.instance.user = self.request.user
         form.instance.transction_type = Transction.type[1][1]
        
-        last_amount =Transction.objects.filter(user=self.request.user).last()
+        last_amount = Transction.objects.filter(user=self.request.user).last()
         if last_amount:
             if last_amount.balance_after_transaction >= int(amount):
                 form.instance.balance_after_transaction = last_amount.balance_after_transaction - int(amount) 
@@ -83,32 +85,24 @@ def TransferAmountView(request):
 
             with transaction.atomic():
                 user1 = Transction.objects.filter(user=request.user).last()
-
                 if user1.balance_after_transaction >= int(amount):
-                    user1.transction_type = Transction.type[1][1]   
                     user1.balance_after_transaction-= int(amount)
-                    user1.user = request.user
-                    user1.amount = int(amount)
-                    user1.save()
-                    
+                    trans = Transction.objects.create(transction_type=Transction.type[1][1],user=request.user,amount = int(amount),balance_after_transaction=user1.balance_after_transaction)
                 else:
-                    messages.success(request,'Not Enough Balance!')
-               
-                user2 = Transction.objects.filter(user__account_number=send).last()
-                user2.balance_after_transaction+=int(amount)
-                user2.transction_type = Transction.type[0][0]
-                user2.amount = int(amount)
-                user2.save()
+                    messages.error(request,'Not Enough Balance')
+                    return HttpResponse(messages)
+                
+                user2 = User.objects.filter(Q(account_number=send) & ~Q(account_number=request.user.account_number)).last()
+                if user2.transactions.last():
+                    last_amount = user2.transactions.last().balance_after_transaction
+                    last_amount+=int(amount)
+                    trans = Transction.objects.create(transction_type=Transction.type[0][0],user=user2 ,amount = int(amount),balance_after_transaction=last_amount)
+                else:
+                    trans = Transction.objects.create(transction_type=Transction.type[0][0],user=user2 ,amount = int(amount),balance_after_transaction=amount)
                 messages.success(request,'Successfully your Amount is transfered')
         except Exception as e:
-            print(e) 
-            messages.success(request,'Account Number does not Exists!')
+            messages.error(request,'Account Number does not Exists!')
     return render(request,"transfer.html")
 
 
-
-
-
-
-
-     
+                
