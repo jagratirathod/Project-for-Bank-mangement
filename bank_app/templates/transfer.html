@@ -4,7 +4,9 @@
 
 <form method="POST" action="">
 {% csrf_token %}
-<center>
+<center>    
+
+<h5 style = "background-color:pink;">{{error_message}}</h5>
 
 {% if messages %}
 <div class="alert alert-info">
@@ -15,7 +17,6 @@
 {% endif %} <br>
 
 
-<h4>Transfer Amount</h4> <br>
 
 <label>To : </label>
 <input type="text"  placeholder="Enter Account Number" name="send"> <br><br>
