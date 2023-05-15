@@ -24,7 +24,7 @@ class DepositView(SuccessMessageMixin,CreateView):
     def form_valid(self,form):
         amount = self.request.POST.get("amount")
         form.instance.user = self.request.user
-        form.instance.transction_type = Transction.type[0][0]
+        form.instance.transction_type = Transction.TRANSACTION_TYPE_CHOICES[0][0]
         last_amount = Transction.objects.filter(user=self.request.user).last()
         if last_amount:
             form.instance.balance_after_transaction= int(amount) + last_amount.balance_after_transaction
@@ -41,7 +41,7 @@ class WithdrawView(SuccessMessageMixin,CreateView):
     def form_valid(self,form):
         amount = self.request.POST.get("amount")
         form.instance.user = self.request.user
-        form.instance.transction_type = Transction.type[1][1]
+        form.instance.transction_type = Transction.TRANSACTION_TYPE_CHOICES[1][1]
        
         last_amount = Transction.objects.filter(user=self.request.user).last()
         if last_amount:
@@ -50,7 +50,7 @@ class WithdrawView(SuccessMessageMixin,CreateView):
             else:
                 return render(self.request, "transfer.html", {'error_message': 'Insufficient Balance!'})
         else:
-            form.instance.balance_after_transaction = int(amount)
+             return render(self.request, "transfer.html", {'error_message': 'Low Balance!'})
         return super().form_valid(form)
     
 class ReportView(ListView):
@@ -87,7 +87,7 @@ def TransferAmountView(request):
                 user1 = Transction.objects.filter(user=request.user).last()
                 if user1.balance_after_transaction >= int(amount):
                     user1.balance_after_transaction-= int(amount)
-                    trans = Transction.objects.create(transction_type=Transction.type[1][1],user=request.user,amount = int(amount),balance_after_transaction=user1.balance_after_transaction)
+                    trans = Transction.objects.create(transction_type=Transction.TRANSACTION_TYPE_CHOICES[2][0],user=request.user,amount = int(amount),balance_after_transaction=user1.balance_after_transaction)
                 else:
                     return render(request, "transfer.html", {'error_message': 'Insufficient Balance!'})
                 
@@ -95,9 +95,9 @@ def TransferAmountView(request):
                 if user2.transactions.last():
                     last_amount = user2.transactions.last().balance_after_transaction
                     last_amount+=int(amount)
-                    trans = Transction.objects.create(transction_type=Transction.type[0][0],user=user2 ,amount = int(amount),balance_after_transaction=last_amount)
+                    trans = Transction.objects.create(transction_type=Transction.TRANSACTION_TYPE_CHOICES[0][0],user=user2 ,amount = int(amount),balance_after_transaction=last_amount)
                 else:
-                    trans = Transction.objects.create(transction_type=Transction.type[0][0],user=user2 ,amount = int(amount),balance_after_transaction=amount)
+                    trans = Transction.objects.create(transction_type=Transction.TRANSACTION_TYPE_CHOICES[0][0],user=user2 ,amount = int(amount),balance_after_transaction=amount)
                 messages.success(request,'Successfully your Amount is transfered')
         except Exception as e:
             messages.error(request,'Account Number does not Exists!')

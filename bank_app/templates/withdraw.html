@@ -16,6 +16,7 @@
     <form action="{% url 'bank_app:withdraw' %}" method="POST" style="width: 300px; height:1000px;">
         {% csrf_token %}
         <br><br>
+        <div>Withdraw Money from Your Account</div> <br>
         {{form|crispy}}  <br>
         <button type="submit" class="btn btn-danger">Submit</button>
     </form>

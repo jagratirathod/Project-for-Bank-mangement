@@ -6,7 +6,7 @@
 {% csrf_token %}
 <center>    
 
-<h5 style = "background-color:pink;">{{error_message}}</h5>
+<div style = "background-color:pink;">{{error_message}}</div>
 
 {% if messages %}
 <div class="alert alert-info">
@@ -15,7 +15,6 @@
     {% endfor %}
 </div>
 {% endif %} <br>
-
 
 
 <label>To : </label>

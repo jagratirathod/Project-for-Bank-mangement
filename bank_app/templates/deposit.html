@@ -17,6 +17,7 @@
     <form action="{% url 'bank_app:deposit' %}" method="POST" style="width: 300px; height:1000px;">
         {% csrf_token %}
         <br><br><br>
+        <div>Deposit Money to your Account </div> <br>
         {{form|crispy}}  <br>
         <button type="submit" class="btn btn-danger">Submit</button>
     </form>
