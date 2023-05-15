@@ -2,14 +2,16 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-
 <div style="background-color: bisque; height:max-content">
 <center>
 
+
 {% if messages %}
 {% for message in messages %}
-<div>{{ message}}</div>
+<div style = "background-color:pink;">{{ message}}</div>
 {% endfor %}
+{% else %}
+<div style = "background-color:pink;">{{error_message}}</div>
 {% endif %}
     
 <div>
