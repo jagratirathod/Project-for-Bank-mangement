@@ -2,11 +2,10 @@
 
 {% block content %}
 
+
 <form method="POST" action="">
 {% csrf_token %}
 <center>    
-
-<div style = "background-color:pink;">{{error_message}}</div>
 
 {% if messages %}
 <div class="alert alert-info">
@@ -14,7 +13,9 @@
         {{message}}
     {% endfor %}
 </div>
-{% endif %} <br>
+{% else %}
+<div style = "background-color:pink;">{{error_message}}</div>
+{% endif %} <br><br><br>
 
 
 <label>To : </label>
@@ -26,6 +27,5 @@
 <button type="submit">Submit </button>
 
 </center>
-
 </form>
 {% endblock %}

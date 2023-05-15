@@ -9,8 +9,10 @@
 
 {% if messages %}
 {% for message in messages %}
-<div>{{ message|safe }}</div>
+<div style = "background-color:pink;">{{ message}}</div>
 {% endfor %}
+{% else %}
+{{error_message}}
 {% endif %}
 
      <div>

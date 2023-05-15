@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 class SignupForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ("email","password1","password2","first_name","last_name",'account_number')
+        fields = ("email","password1","password2","first_name","last_name")
 
     def clean_account_number(self):
         account_number = str(self.cleaned_data['account_number'])

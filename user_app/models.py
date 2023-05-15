@@ -19,3 +19,7 @@ class User(AbstractUser):
 
     def __int__(self):
         return self.email
+
+    # def save(self, *args, **kwargs):
+    #     self.account_number = random.randrange(100000000000,999999999999)
+    #     super().save(*args, **kwargs)
