@@ -12,16 +12,22 @@
         <tr>
           <th class=" border border-black px-4 py-2">Date</th>
           <th class=" border border-black px-4 py-2" >Transction Type</th>
-          <th class=" border border-black px-4 py-2">Amount</th>
+          <th class=" border border-black px-4 py-2">Credit</th>
+          <th class=" border border-black px-4 py-2">Debit</th>
           <th class=" border border-black px-4 py-2">Balance After Transaction</th>
         </tr> <br><br>
-      
 
         {% for report in tran_report %}
         <tr>
           <td class=" border border-black px-4 py-2">{{report.current_time}}</td>
           <td class=" border border-black px-4 py-2">{{report.transction_type}}</td>
-          <td class=" border border-black px-4 py-2">{{report.amount}}</td>
+          {% if report.transction_type == 'Deposit' %}
+            <td class=" border border-black px-4 py-2">{{report.amount}}</td>
+            <td class="border border-black px-4 py-2"></td>
+          {% else %}
+          <td class="border border-black px-4 py-2"></td>
+          <td class="border border-black px-4 py-2">{{ report.amount }}</td>
+          {% endif %}
           <td class=" border border-black px-4 py-2">{{report.balance_after_transaction}}</td>
         </tr> <br>
         {% endfor %}
