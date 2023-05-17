@@ -1,16 +1,16 @@
-from django.shortcuts import render
-from django.views.generic.edit import CreateView
-from django.urls import reverse_lazy
-from django.contrib.messages.views import SuccessMessageMixin
-from django.views.generic.list import ListView
-from django.db import transaction
 from django.contrib import messages
-from django.http import HttpResponse
+from django.contrib.messages.views import SuccessMessageMixin
+from django.db import transaction
 from django.db.models import Q
-
-from .models import Transction
+from django.http import HttpResponse
+from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView
+from django.views.generic.list import ListView
 from user_app.models import User
-from . forms import DepositForm, WithdrawForm
+
+from .forms import DepositForm, WithdrawForm
+from .models import Transction
 
 
 def home(request):
