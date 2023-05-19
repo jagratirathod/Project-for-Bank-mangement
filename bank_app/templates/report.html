@@ -3,18 +3,17 @@
 
 {% block content %}
 
+
 <br>
 <center>
 <h2>Transaction Report</h2> <br><br>
 </center>
-
     <table class="mx-auto w-full mt-8 border-collapse">
         <tr>
           <th class=" border border-black px-4 py-2">Date</th>
           <th class=" border border-black px-4 py-2" >Transction Type</th>
           <th class=" border border-black px-4 py-2">Credit</th>
           <th class=" border border-black px-4 py-2">Debit</th>
-          <th class=" border border-black px-4 py-2">Balance After Transaction</th>
         </tr> <br><br>
 
         {% for report in tran_report %}
@@ -22,7 +21,7 @@
           <td class=" border border-black px-4 py-2">{{report.current_time}}</td>
           <td class=" border border-black px-4 py-2">{{report.transction_type}}</td>
 
-          {% if report.transction_type == 'Deposit' or report.transction_type == 'Receive' %}
+          {% if report.amount_type == 'Credit'%}
             <td class=" border border-black px-4 py-2">{{report.amount}}</td>
             <td class="border border-black px-4 py-2"></td>
           {% else %}
@@ -30,15 +29,12 @@
           <td class="border border-black px-4 py-2">{{ report.amount }}</td>
           {% endif %}
 
-          <td class=" border border-black px-4 py-2">{{report.balance_after_transaction}}</td>
         </tr> <br>
         {% endfor %}
 
         <tr class="bg-gray-600 text-black" >
           <th class="border border-blue-900 px-4 py-2 text-right" colspan="3">Current Balance</th>
-          <th class="border border-blue-900 px-4 py-2 text-right" colspan="3">{{total}}</th>
+          <th class="border border-blue-900 px-4 py-2 text-right" colspan="3">{{balance}}</th>
         </tr>
       </table>
 {% endblock %}
-
-

@@ -1,5 +1,6 @@
 from django.db import models
 from user_app.models import User
+from django.db.models import Sum
 
 # Create your models here.
 
@@ -25,8 +26,6 @@ class Transction(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='transactions')
     amount = models.DecimalField(decimal_places=2, max_digits=12)
-    balance_after_transaction = models.DecimalField(
-        decimal_places=2, max_digits=12, default=0)
 
     def __int__(self):
         return self.amount
@@ -37,3 +36,34 @@ class Transction(models.Model):
         else:
             self.amount_type = Transction.AMOUNT_TYPE_CHOICES[1][1]
         super().save(*args, **kwargs)
+
+    # def calculate_balance(user):                                                //function
+    #     transactions = Transction.objects.filter(user=user)
+    #     balance = 0
+    #     for transaction in transactions:
+    #         if transaction.amount_type == 'Credit':
+    #             balance += transaction.amount
+    #         elif transaction.amount_type == 'Debit':
+    #             balance -= transaction.amount
+    #     return balance
+
+    # @property                                                                    //@property using for loop
+    # def balance(self):
+    #     transactions = Transction.objects.filter(user=self.user)
+    #     balance = 0
+    #     for transaction in transactions:
+    #         if transaction.amount_type == 'Credit':
+    #             balance += transaction.amount
+    #         elif transaction.amount_type == 'Debit':
+    #             balance -= transaction.amount
+    #     return balance
+
+    @property
+    def balance(self):
+        credits = Transction.objects.filter(
+            user=self.user, amount_type="Credit").aggregate(balance=Sum('amount'))['balance'] or 0
+
+        debit = Transction.objects.filter(
+            user=self.user, amount_type="Debit").aggregate(balance=Sum('amount'))['balance'] or 0
+        balance = credits - debit
+        return balance
