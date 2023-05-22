@@ -1,3 +1,4 @@
+from typing import List
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db import transaction
@@ -11,6 +12,7 @@ from user_app.models import User
 
 from .forms import DepositForm, WithdrawForm
 from .models import Transction
+from django.db.models import Sum
 
 
 def home(request):
@@ -55,23 +57,45 @@ class WithdrawView(SuccessMessageMixin, CreateView):
 
 class ReportView(ListView):
     model = Transction
-    template_name = "report.html"
     context_object_name = "tran_report"
 
     def get_queryset(self):
-        trans = Transction.objects.all()
-        return trans if self.request.user.is_manager == True else Transction.objects.filter(user=self.request.user)
+        return Transction.objects.filter(user=self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        transaction = Transction.objects.filter(
-            user=self.request.user).first()
 
-        if transaction and transaction.balance:
-            context['balance'] = transaction.balance
+        if self.request.user.is_manager == True:
+            balances = []
+
+            for user in User.objects.all().exclude(email=self.request.user):
+                credits = Transction.objects.filter(
+                    user=user, amount_type="Credit").aggregate(balance=Sum('amount'))['balance'] or 0
+
+                debits = Transction.objects.filter(
+                    user=user, amount_type="Debit").aggregate(balance=Sum('amount'))['balance'] or 0
+                balance = credits - debits
+                balances.append(balance)
+                combined_data = zip(User.objects.all().exclude(
+                    email=self.request.user), balances)
+            context['combined_data'] = combined_data
+            return context
+
         else:
-            context['balance'] = 0
-        return context
+            transaction = Transction.objects.filter(
+                user=self.request.user).first()
+
+            if transaction and transaction.balance:
+                context['balance'] = transaction.balance
+            else:
+                context['balance'] = 0
+            return context
+
+    def get_template_names(self):
+        if self.request.user.is_manager:
+            return ["report_manager.html"]
+        else:
+            return ["report.html"]
 
 
 def TransferAmountView(request):
@@ -91,7 +115,7 @@ def TransferAmountView(request):
 
                 user2 = User.objects.filter(Q(account_number=send) & ~Q(
                     account_number=request.user.account_number)).last()
-                trans = Transction.objects.create(
+                Transction.objects.create(
                     transction_type=Transction.TRANSACTION_TYPE_CHOICES[3][0], user=user2, amount=int(amount))
                 messages.success(
                     request, 'Successfully your Amount is transfered')

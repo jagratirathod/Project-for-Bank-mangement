@@ -37,27 +37,6 @@ class Transction(models.Model):
             self.amount_type = Transction.AMOUNT_TYPE_CHOICES[1][1]
         super().save(*args, **kwargs)
 
-    # def calculate_balance(user):                                                //function
-    #     transactions = Transction.objects.filter(user=user)
-    #     balance = 0
-    #     for transaction in transactions:
-    #         if transaction.amount_type == 'Credit':
-    #             balance += transaction.amount
-    #         elif transaction.amount_type == 'Debit':
-    #             balance -= transaction.amount
-    #     return balance
-
-    # @property                                                                    //@property using for loop
-    # def balance(self):
-    #     transactions = Transction.objects.filter(user=self.user)
-    #     balance = 0
-    #     for transaction in transactions:
-    #         if transaction.amount_type == 'Credit':
-    #             balance += transaction.amount
-    #         elif transaction.amount_type == 'Debit':
-    #             balance -= transaction.amount
-    #     return balance
-
     @property
     def balance(self):
         credits = Transction.objects.filter(
