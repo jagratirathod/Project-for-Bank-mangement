@@ -60,7 +60,7 @@ class ReportView(ListView):
     context_object_name = "tran_report"
 
     def get_queryset(self):
-        return Transction.objects.filter(user=self.request.user)
+        return Transction.objects.filter(user=self.request.user).order_by('-current_time')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -108,18 +108,26 @@ def TransferAmountView(request):
                 balance = Transction.objects.filter(
                     user=request.user).first().balance
                 if balance > int(amount):
-                    trans = Transction.objects.create(
+                    sender_transaction = Transction.objects.create(
                         transction_type=Transction.TRANSACTION_TYPE_CHOICES[2][0], user=request.user, amount=int(amount))
+
                 else:
                     return render(request, "transfer.html", {'error_message': 'Insufficient Balance!'})
 
                 user2 = User.objects.filter(Q(account_number=send) & ~Q(
                     account_number=request.user.account_number)).last()
-                Transction.objects.create(
+                recipient_transaction = Transction.objects.create(
                     transction_type=Transction.TRANSACTION_TYPE_CHOICES[3][0], user=user2, amount=int(amount))
+
+                sender_transaction.recipient = user2.first_name + " " + user2.last_name
+                sender_transaction.save()
+
+                recipient_transaction.sender = request.user.first_name + " " + request.user.last_name
+                recipient_transaction.save()
+
                 messages.success(
                     request, 'Successfully your Amount is transfered')
+
         except Exception as e:
-            print(e)
             messages.error(request, 'Account Number does not Exists!')
     return render(request, "transfer.html")

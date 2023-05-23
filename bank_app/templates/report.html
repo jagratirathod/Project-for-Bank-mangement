@@ -14,6 +14,8 @@
           <th class=" border border-black px-4 py-2" >Transction Type</th>
           <th class=" border border-black px-4 py-2">Credit</th>
           <th class=" border border-black px-4 py-2">Debit</th>
+          <th class=" border border-black px-4 py-2">Description</th>
+
         </tr> <br><br>
 
         {% for report in tran_report %}
@@ -29,6 +31,13 @@
           <td class="border border-black px-4 py-2">{{ report.amount }}</td>
           {% endif %}
 
+          {% if report.sender %}
+          <td class="border border-black px-4 py-2">Transfered from - {{report.sender}}</td>
+          {% elif report.recipient %}
+          <td class="border border-black px-4 py-2">Transfered to - {{report.recipient}}</td>
+          {% else %}
+          <td class="border border-black px-4 py-2"></td>
+          {% endif %}
         </tr> <br>
         {% endfor %}
 

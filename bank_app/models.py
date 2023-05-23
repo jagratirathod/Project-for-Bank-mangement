@@ -26,6 +26,8 @@ class Transction(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='transactions')
     amount = models.DecimalField(decimal_places=2, max_digits=12)
+    sender = models.CharField(max_length=100, null=True, blank=True)
+    recipient = models.CharField(max_length=100, null=True, blank=True)
 
     def __int__(self):
         return self.amount

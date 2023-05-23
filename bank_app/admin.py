@@ -7,7 +7,7 @@ from . models import Transction
 
 class TransactionAdmin(admin.ModelAdmin):
     list_display = ['id', 'transction_type', 'current_time', 'user',
-                    'amount', 'amount_type']
+                    'amount', 'amount_type', 'sender', 'recipient']
 
 
 admin.site.register(Transction, TransactionAdmin)
