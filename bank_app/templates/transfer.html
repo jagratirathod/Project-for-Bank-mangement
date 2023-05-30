@@ -2,11 +2,10 @@
 
 {% block content %}
 
-
 <form method="POST" action="">
 {% csrf_token %}
-<center>    
 
+<center>    
 {% if messages %}
 <div class="alert alert-info">
     {% for message in messages %}
@@ -18,13 +17,22 @@
 {% endif %} <br><br><br>
 
 
-<label>To : </label>
-<input type="text"  placeholder="Enter Account Number" name="send"> <br><br>
+<!-- <label for="emailInput">To:</label>
+<input type="text" placeholder="Enter Account Number" name="send" list="account_numbers"> <br><br>
+
+<datalist id="account_numbers">
+    {% for account_number in registered_account_numbers %}  
+        <option >{{ account_number }} </option>
+    {% endfor %}
+</datalist> -->
+
+<h6 style = "color: black;"><strong>Paid Amount To - {{user_name|upper}}</strong></h6>  <br>
 
 <label>Amount :</label>
-<input type="text"  placeholder="Enter Amount" name="amount"> <br><br>
+<input required type="text"  placeholder="&#8377;  Enter Amount" name="amount"> <br><br>
 
-<button type="submit">Submit </button>
+<button type="submit" class="btn btn-warning" data-toggle="modal" data-target="#exampleModal"
+                data-whatever="@mdo">PROCEED TO PAY</button>
 
 </center>
 </form>

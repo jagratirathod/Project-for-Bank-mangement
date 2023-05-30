@@ -26,6 +26,8 @@ class Transction(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='transactions')
     amount = models.DecimalField(decimal_places=2, max_digits=12)
+    sender = models.CharField(max_length=100, null=True, blank=True)
+    recipient = models.CharField(max_length=100, null=True, blank=True)
 
     def __int__(self):
         return self.amount
@@ -37,27 +39,6 @@ class Transction(models.Model):
             self.amount_type = Transction.AMOUNT_TYPE_CHOICES[1][1]
         super().save(*args, **kwargs)
 
-    # def calculate_balance(user):                                                //function
-    #     transactions = Transction.objects.filter(user=user)
-    #     balance = 0
-    #     for transaction in transactions:
-    #         if transaction.amount_type == 'Credit':
-    #             balance += transaction.amount
-    #         elif transaction.amount_type == 'Debit':
-    #             balance -= transaction.amount
-    #     return balance
-
-    # @property                                                                    //@property using for loop
-    # def balance(self):
-    #     transactions = Transction.objects.filter(user=self.user)
-    #     balance = 0
-    #     for transaction in transactions:
-    #         if transaction.amount_type == 'Credit':
-    #             balance += transaction.amount
-    #         elif transaction.amount_type == 'Debit':
-    #             balance -= transaction.amount
-    #     return balance
-
     @property
     def balance(self):
         credits = Transction.objects.filter(
@@ -67,3 +48,11 @@ class Transction(models.Model):
             user=self.user, amount_type="Debit").aggregate(balance=Sum('amount'))['balance'] or 0
         balance = credits - debit
         return balance
+
+
+class BankAccounts(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='bank')
+    payee = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='payee', null=True)
+    nickname = models.CharField(max_length=100, null=True, blank=True)

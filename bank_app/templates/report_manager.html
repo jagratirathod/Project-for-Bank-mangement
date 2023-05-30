@@ -1,0 +1,28 @@
+{% extends 'b_base.html' %}
+
+
+{% block content %}
+<br>
+<center>
+<h2>Transaction Report</h2> <br><br>
+</center>
+    <table class="mx-auto w-full mt-8 border-collapse">
+        <tr>
+          <th class=" border border-black px-4 py-2" >User</th>
+          <th class="border border-blue-900 px-4 py-2 text-right" colspan="3">Current Balance</th>
+
+        </tr> <br><br>
+        
+        {% for user, balance in combined_data %}
+        <tr>
+            <td class="border border-black px-4 py-2">{{ user.first_name}} {{user.last_name }}</td>
+            <td class="border border-blue-900 px-4 py-2 text-right" colspan="3">{{ balance }}</td>
+        </tr>
+    {% endfor %}
+    
+        
+    </table>
+{% endblock %}
+
+
+

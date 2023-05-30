@@ -1,0 +1,20 @@
+{% extends 'b_base.html' %}
+
+{% block content %}
+
+<div style="background-color:blanchedalmond;height:500px;">
+   
+    <center><br><br><br><br>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <p>Are you sure you want to delete ?</p>
+            {{form}}
+
+            <input type="submit" value="Confirm">
+        </form>
+    </center>
+</div>
+
+{% endblock %}
