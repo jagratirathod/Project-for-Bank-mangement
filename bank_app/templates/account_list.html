@@ -1,0 +1,50 @@
+{% extends 'b_base.html' %}
+{% load  custom_filters %}
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+<center>
+{% if messages %}
+{% for message in messages %}
+<div>{{ message}}</div>
+{% endfor %}
+{% endif %}
+
+
+<div> <br>
+    <h2 style="color:black;">Payee List</h2>  <hr/>
+    </center>
+    <div style = "background-color:blanchedalmond; height:100vh" ><br><br>
+
+    <a href="{% url 'bank_app:bank' %}" class="btn btn-info">ADD BENEFICIARY ACCOUNT </a>
+    <a href="{% url 'bank_app:report' %}" style="float: right" class="btn btn-warning">History </a>
+
+    {% if bank_account %}
+
+    <table class="table-auto mx-auto w-full mt-8 border-collapse">
+
+        {% for acc, user in account_numbers %}
+        <tr>
+            <td class="border border-black px-4 py-2"><strong>{{ user.nickname|upper}}</strong></td>
+            <td class="border border-black px-4 py-2"><strong>{{acc|mask_account_number}}</strong></td>
+
+            <td>    
+                <div class="btn-group">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="/bank_app/transfer_amount/?send={{acc}}">Transfer</a></li>
+                  <li><a class="dropdown-item" href="/bank_app/history/?account_number={{acc}}">History</a></li>
+                  <li><a class="dropdown-item" href="{% url 'bank_app:delete_account' user.id %}">Delete</a></li>
+                </ul>
+              </div>
+            </td>
+             
+         </tr>
+        {% endfor %}
+
+    </table>
+     {% endif %}
+    </div>
+
+{% endblock %}

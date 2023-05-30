@@ -1,5 +1,5 @@
 from django.contrib import admin
-from . models import Transction
+from . models import Transction, BankAccounts
 
 
 # Register your models here.
@@ -11,3 +11,10 @@ class TransactionAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Transction, TransactionAdmin)
+
+
+class BankAccountsAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user', 'payee', 'nickname']
+
+
+admin.site.register(BankAccounts, BankAccountsAdmin)

@@ -48,3 +48,11 @@ class Transction(models.Model):
             user=self.user, amount_type="Debit").aggregate(balance=Sum('amount'))['balance'] or 0
         balance = credits - debit
         return balance
+
+
+class BankAccounts(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='bank')
+    payee = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='payee', null=True)
+    nickname = models.CharField(max_length=100, null=True, blank=True)

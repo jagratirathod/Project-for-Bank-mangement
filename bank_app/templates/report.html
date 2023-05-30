@@ -1,49 +1,55 @@
 {% extends 'b_base.html' %}
-
-
 {% block content %}
 
 
-<br>
-<center>
-<h2>Transaction Report</h2> <br><br>
-</center>
-    <table class="mx-auto w-full mt-8 border-collapse">
-        <tr>
+
+<h1 class="font-mono font-bold text-3xl text-center pb-5 pt-2">Transaction Report</h1>  <hr/>
+
+<div style = "background-color:blanchedalmond; height:max-content" ><br><br>
+
+
+    <table class="table-auto mx-auto w-full mt-8 border-collapse">
+      <thead style="background-color:rgb(34, 34, 74); color:white">
+        <tr  class="uppercase font-semibold text-sm">
           <th class=" border border-black px-4 py-2">Date</th>
           <th class=" border border-black px-4 py-2" >Transction Type</th>
           <th class=" border border-black px-4 py-2">Credit</th>
           <th class=" border border-black px-4 py-2">Debit</th>
           <th class=" border border-black px-4 py-2">Description</th>
-
-        </tr> <br><br>
+        </tr>
+      </thead>
+      <tbody>
 
         {% for report in tran_report %}
-        <tr>
-          <td class=" border border-black px-4 py-2">{{report.current_time}}</td>
-          <td class=" border border-black px-4 py-2">{{report.transction_type}}</td>
+        <tr style="background-color:gray;color:white;">
+          <td class="border border-blue-900 px-4 py-2">{{report.current_time}}</td>
+          <td class="border border-blue-900 px-4 py-2">{{report.transction_type}}</td>
 
           {% if report.amount_type == 'Credit'%}
-            <td class=" border border-black px-4 py-2">{{report.amount}}</td>
-            <td class="border border-black px-4 py-2"></td>
+            <td class="border border-blue-900 px-4 py-2">{{report.amount}}</td>
+            <td class="border border-blue-900 px-4 py-2"></td>
           {% else %}
-          <td class="border border-black px-4 py-2"></td>
-          <td class="border border-black px-4 py-2">{{ report.amount }}</td>
+          <td class="border border-blue-900 px-4 py-2"></td>
+          <td class="border border-blue-900 px-4 py-2">{{ report.amount }}</td>
           {% endif %}
 
           {% if report.sender %}
-          <td class="border border-black px-4 py-2">Transfered from - {{report.sender}}</td>
+          <td class="border border-blue-900 px-4 py-2">Transfered by - {{report.sender}}</td>
           {% elif report.recipient %}
-          <td class="border border-black px-4 py-2">Transfered to - {{report.recipient}}</td>
+          <td class="border border-blue-900 px-4 py-2">Transfered to - {{report.recipient}}</td>
           {% else %}
-          <td class="border border-black px-4 py-2"></td>
+          <td class="border border-blue-900 px-4 py-2"></td>
           {% endif %}
-        </tr> <br>
+        </tr> 
         {% endfor %}
 
-        <tr class="bg-gray-600 text-black" >
-          <th class="border border-blue-900 px-4 py-2 text-right" colspan="3">Current Balance</th>
-          <th class="border border-blue-900 px-4 py-2 text-right" colspan="3">{{balance}}</th>
+        {% if balance %}
+        <tr style="background-color: rgb(56, 56, 216); color:whitesmoke" >
+          <th class="border border-blue-900 px-4 py-2 text-right" colspan="4">Current Balance</th>
+          <th class="border border-blue-900 px-4 py-2 text-right"> &#8377;{{balance}}</th>
         </tr>
+        {% endif %}
+       </tbody>
       </table>
+</div>
 {% endblock %}
