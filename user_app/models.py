@@ -8,7 +8,7 @@ from .manager import UserManager
 class User(AbstractUser):
     username = None
     email = models.EmailField(unique=True)
-    account_number = models.IntegerField(unique=True,null=True)
+    account_number = models.IntegerField(unique=True, null=True)
     is_manager = models.BooleanField(default=False)
 
     objects = UserManager()

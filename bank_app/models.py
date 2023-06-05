@@ -24,7 +24,7 @@ class Transction(models.Model):
         max_length=20, choices=TRANSACTION_TYPE_CHOICES)
     current_time = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='transactions')
+        User, on_delete=models.CASCADE, related_name='transactions', null=True)
     amount = models.DecimalField(decimal_places=2, max_digits=12)
     sender = models.CharField(max_length=100, null=True, blank=True)
     recipient = models.CharField(max_length=100, null=True, blank=True)
