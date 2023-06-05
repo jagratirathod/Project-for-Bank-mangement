@@ -14,4 +14,5 @@ urlpatterns = [
     path('delete_account/<int:pk>/',
          views.Accountdelete.as_view(), name="delete_account"),
     path('history/', views.TransactionHistoryView.as_view(), name="history"),
+    path('balance_user/', views.BalanceUserView.as_view(), name="balance_user"),
 ]

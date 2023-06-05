@@ -30,14 +30,12 @@
             <h5> <a class="nav-link" href="{% url 'bank_app:withdraw' %}">Withdraw</a></h5>
           </li>
 
-          <!-- <li class="nav-item">
-            <h5> <a class="nav-link" href="{% url 'bank_app:transfer' %}">Transfer Amount</a></h5>
-          </li> -->
 
-
-          <!-- <li class="nav-item">
-            <h5> <a class="nav-link" href="{% url 'bank_app:bank' %}">Bank Account</a></h5>
-          </li> -->
+          {% if request.user.is_manager %}
+          <li class="nav-item">
+            <h5> <a class="nav-link" href="{% url 'bank_app:balance_user' %}">User Balance</a></h5>
+          </li>
+          {% endif %}
 
           <li class="nav-item">
             <h5> <a class="nav-link" href="{% url 'bank_app:list_account' %}">Payee list</a></h5>

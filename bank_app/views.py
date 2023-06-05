@@ -1,19 +1,18 @@
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db import transaction
-from django.db.models import Q, Sum
+from django.db.models import Q, Sum, Value
+from django.db.models.functions import Concat
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils import timezone
+from django.views import View
 from django.views.generic.edit import CreateView, DeleteView
 from django.views.generic.list import ListView
 from user_app.models import User
 
 from .forms import BankAccountForm, DepositForm, WithdrawForm
 from .models import BankAccounts, Transction
-from django.views import View
-from django.db.models.functions import Concat
-from django.db.models import Value
 
 
 def home(request):
@@ -90,13 +89,28 @@ class WithdrawView(SuccessMessageMixin, CreateView):
 class ReportView(ListView):
     model = Transction
     context_object_name = "tran_report"
+    template_name = "report.html"
 
     def get_queryset(self):
         return Transction.objects.filter(user=self.request.user).order_by('-current_time')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        transaction = Transction.objects.filter(
+            user=self.request.user).first()
+        if transaction and transaction.balance:
+            context['balance'] = transaction.balance
+        else:
+            context['balance'] = 0
+        return context
 
+
+class BalanceUserView(ListView):
+    model = Transction
+    context_object_name = "combined_data"
+    template_name = "report_manager.html"
+
+    def get_queryset(self):
         if self.request.user.is_manager == True:
             balances = []
 
@@ -110,24 +124,7 @@ class ReportView(ListView):
                 balances.append(balance)
                 combined_data = zip(User.objects.all().exclude(
                     email=self.request.user), balances)
-            context['combined_data'] = combined_data
-            return context
-
-        else:
-            transaction = Transction.objects.filter(
-                user=self.request.user).first()
-
-            if transaction and transaction.balance:
-                context['balance'] = transaction.balance
-            else:
-                context['balance'] = 0
-            return context
-
-    def get_template_names(self):
-        if self.request.user.is_manager:
-            return ["report_manager.html"]
-        else:
-            return ["report.html"]
+            return combined_data
 
 
 def transfer_amountView(request):
@@ -149,9 +146,9 @@ def transfer_amountView(request):
                 return render(request, "transfer.html", {'error_message': 'You have reached the maximum daily withdrawal limit of 25,000.'})
 
             with transaction.atomic():
-                balance = Transction.objects.filter(
-                    user=request.user).first().balance
-                if balance > int(amount):
+                tran = Transction.objects.filter(
+                    user=request.user).first()
+                if tran.balance > int(amount):
                     sender_transaction = Transction.objects.create(
                         transction_type=Transction.TRANSACTION_TYPE_CHOICES[2][0], user=request.user, amount=int(amount))
                 else:
@@ -191,7 +188,8 @@ class AddBankAccountView(SuccessMessageMixin, CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         account_number = form.cleaned_data['account_number']
-        user = User.objects.filter(account_number=account_number).first()
+        user = User.objects.filter(Q(account_number=account_number) & ~Q(
+            account_number=self.request.user.account_number)).first()
         if not user:
             return render(self.request, "account_create.html", {'error_message': "Account Number does not exists", "form": form})
         form.instance.payee = user
