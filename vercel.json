@@ -2,9 +2,9 @@
     "version": 2,
     "builds": [
         {
-            "src": "poll/wsgi.py",
+            "src": "Bank/wsgi.py",
             "use": "@vercel/python",
-            "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
+            "config": { "maxLambdaSize": "15mb", "runtime": "python3.10" }
         },
 
         {
@@ -22,7 +22,7 @@
 
         {
             "src":"/(.*)",
-            "dest" : "poll/wsgi.py"
+            "dest" : "Bank/wsgi.py"
         }
     ]
 }
