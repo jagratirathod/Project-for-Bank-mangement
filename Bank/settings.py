@@ -94,9 +94,20 @@ WSGI_APPLICATION = 'Bank.wsgi.application'
 #     }
 # }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',  
+#         'NAME': 'railway',         
+#         'USER': 'root',             
+#         'PASSWORD': 'jtBrIyUQCsesqUiPiNyFJEmwJPaSEomm',     
+#         'HOST': 'mainline.proxy.rlwy.net',                         # Usually 'localhost' or an IP address
+#         'PORT': '11213',                                           # Default MySQL port
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',  
+        'ENGINE': 'mysql.connector.django',  
         'NAME': 'railway',         
         'USER': 'root',             
         'PASSWORD': 'jtBrIyUQCsesqUiPiNyFJEmwJPaSEomm',     
@@ -104,6 +115,9 @@ DATABASES = {
         'PORT': '11213',                                           # Default MySQL port
     }
 }
+
+
+
 
 # mysql://root:jtBrIyUQCsesqUiPiNyFJEmwJPaSEomm@mainline.proxy.rlwy.net:11213/railway
 
