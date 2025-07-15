@@ -25,7 +25,10 @@ SECRET_KEY = 'django-insecure-dmlcmtr*q&p4^jhgu3*f&gs=iohx0g36b=6)6$0!wtvy(nwb$z
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app', '.now.sh']
+# ALLOWED_HOSTS = ['.vercel.app', '.now.sh']
+
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.vercel.app', '.now.sh']
+
 
 # Application definition
 
@@ -91,17 +94,18 @@ WSGI_APPLICATION = 'Bank.wsgi.application'
 #     }
 # }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',  # Use MySQL as the database engine
-#         'NAME': 'bank_db',          # Name of your MySQL database
-#         'USER': 'bank_user',             # Your MySQL username
-#         'PASSWORD': 'bank@12345',     # Your MySQL password
-#         'HOST': 'https://bankingsiteproject-emilb25zu-jagratirathods-projects.vercel.app/',       # Usually 'localhost' or an IP address
-#         'PORT': '3306',                        # Default MySQL port
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',  
+        'NAME': 'railway',         
+        'USER': 'root',             
+        'PASSWORD': 'jtBrIyUQCsesqUiPiNyFJEmwJPaSEomm',     
+        'HOST': 'mainline.proxy.rlwy.net',                         # Usually 'localhost' or an IP address
+        'PORT': '11213',                                           # Default MySQL port
+    }
+}
 
+# mysql://root:jtBrIyUQCsesqUiPiNyFJEmwJPaSEomm@mainline.proxy.rlwy.net:11213/railway
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
